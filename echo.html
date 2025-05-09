@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ECHO (Extragalactic Celestial Horizon Observer)</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f2f2f2;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    /* Top Banner */
+    .top-banner {
+      background: #007acc;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .settings-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .settings-button {
+      background: #fff;
+      color: #007acc;
+      border: none;
+      padding: 8px 16px;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .settings-button:hover {
+      background: #e6f3ff;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 40px;
+      left: 0;
+      background-color: white;
+      min-width: 180px;
+      box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+      z-index: 999;
+      border-radius: 5px;
+    }
+
+    .dropdown-content a {
+      color: #007acc;
+      padding: 10px 16px;
+      text-decoration: none;
+      display: block;
+      border-bottom: 1px solid #eee;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #f2f9ff;
+    }
+
+    .settings-dropdown.active .dropdown-content {
+      display: block;
+    }
+
+    h1 {
+      text-align: center;
+      color: #007acc;
+      margin-top: 30px;
+    }
+
+    .step {
+      background: #fff;
+      border: 1px solid #ccc;
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 800px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .step h2 {
+      font-size: 1.2rem;
+      color: #444;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #dcdcdc;
+      border-radius: 5px;
+      overflow-x: auto;
+      position: relative;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+
+    pre code {
+      display: block;
+      padding: 12px 16px;
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
+
+    button.copy {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #06a6ff;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button.copy:hover {
+      background: #007acc;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Top Banner -->
+<div class="top-banner">
+  <div class="settings-dropdown" id="settingsDropdown">
+    <button class="settings-button" onclick="toggleDropdown()">⚙️ Settings</button>
+    <div class="dropdown-content">
+      <a href="https://github.com/" target="_blank">GitHub</a>
+      <a href="https://gaia-syndicate.com" target="_blank">The GAIA Syndicate</a>
+    </div>
+  </div>
+</div>
+
+<h1>ECHO (Extragalactic Celestial Horizon Observer)</h1>
+
+<div class="step">
+  <h2>Step 1: Set Up Hardware for ECHO</h2>
+  <p>Before installing any software, make sure your hardware is connected and ready:</p>
+
+  <h3>🧰 Required Components</h3>
+  <ul>
+    <li><strong>Raspberry Pi:</strong> Pi 4 or Pi 5 recommended for best performance</li>
+    <li><strong>Camera:</strong> Canon Rebel (DSLR)</li>
+    <li><strong>Touchscreen:</strong> 10-inch touchscreen display</li>
+    <li><strong>MicroSD Card:</strong> Preloaded with Raspberry Pi OS</li>
+    <li><strong>Power Supply:</strong> Official Raspberry Pi adapter for stability</li>
+  </ul>
+</div>
+
+<div class="step">
+  <h2>Step 2: Install the Desktop Environment</h2>
+  <p>If your Raspberry Pi's graphical interface is missing or broken, you can reinstall the LXDE desktop environment along with LightDM and the X server.</p>
+
+  <h3>🔄 Update Your System</h3>
+  <pre><code>sudo apt update</code></pre>
+
+  <h3>🖥️ Reinstall LXDE Desktop Environment</h3>
+  <p>This command reinstalls all the essential components needed to restore the desktop interface:</p>
+  <pre><code>sudo apt install --reinstall lxde lxde-core lxde-common lightdm xserver-xorg -y</code></pre>
+
+  <p>Once complete, reboot your Raspberry Pi to load the desktop interface:</p>
+  <pre><code>sudo reboot</code></pre>
+</div>
+
+<div class="step">
+  <h2>Step 3: Verify Desktop Sessions</h2>
+  <p>After reinstalling LXDE, verify that the desktop session files are present. These files tell LightDM which desktop environments are available.</p>
+
+  <h3>📂 List Available Sessions</h3>
+  <pre><code>ls /usr/share/xsessions/</code></pre>
+
+  <p>You should see an entry like:</p>
+  <pre><code>LXDE-pi.desktop</code></pre>
+
+  <p>If this file appears, it means the LXDE desktop environment is correctly installed and ready to use.</p>
+</div>
+
+<div class="step">
+  <h2>Step 4: Configure LightDM for Auto Login</h2>
+  <p>To automatically boot into the LXDE desktop as your user, edit the LightDM configuration file:</p>
+
+  <h3>🛠️ Edit LightDM Config</h3>
+  <pre><code>sudo nano /etc/lightdm/lightdm.conf</code></pre>
+
+  <p>Add or update the following lines under the <code>[Seat:*]</code> section:</p>
+  <pre><code>greeter-session=pi-greeter
+user-session=LXDE-pi
+autologin-user=jedi
+autologin-session=LXDE-pi</code></pre>
+
+  <p>Replace <code>jedi</code> with your actual username if different. Save and exit (<code>CTRL+X</code>, then <code>Y</code>, then <code>Enter</code>).</p>
+
+  <p>After this step, your Raspberry Pi will automatically log into the LXDE desktop when it boots.</p>
+</div>
+
+<div class="step">
+  <h2>Step 5: Reboot and Launch Desktop</h2>
+  <p>Now that everything is configured, reboot your Raspberry Pi to apply the changes and launch the desktop environment.</p>
+
+  <h3>🔁 Reboot Your Pi</h3>
+  <pre><code>sudo reboot</code></pre>
+
+  <p>After rebooting, your system should automatically log into the LXDE desktop as the specified user.</p>
+</div>
+
+<div class="step">
+  <h2>Step 6: Confirm Desktop Environment</h2>
+  <p>After rebooting, your Raspberry Pi should:</p>
+  <ul>
+    <li>✅ Boot directly into the LXDE desktop</li>
+    <li>✅ Automatically log in as <code>jedi</code></li>
+    <li>✅ Be running in <strong>X11</strong> session mode</li>
+  </ul>
+
+  <h3>🧪 Confirm X11 Session</h3>
+  <p>Open a terminal window and run the following command:</p>
+  <pre><code>echo $XDG_SESSION_TYPE</code></pre>
+
+  <p>If everything is set up correctly, the output should be:</p>
+  <pre><code>x11</code></pre>
+
+  <p>This confirms that your Pi is using the X11 session for the graphical environment.</p>
+</div>
+<div class="step">
+  <h2>Step 7: (Optional) Recheck LightDM Configuration</h2>
+  <p>If your system didn’t auto-login or load the LXDE desktop properly, double-check your LightDM config file for accuracy.</p>
+
+  <h3>📝 Reopen LightDM Config</h3>
+  <pre><code>sudo nano /etc/lightdm/lightdm.conf</code></pre>
+
+  <p>Ensure the following lines are present under the <code>[Seat:*]</code> section:</p>
+  <pre><code>greeter-session=pi-greeter
+user-session=LXDE-pi
+autologin-user=jedi
+autologin-session=LXDE-pi</code></pre>
+
+  <p>Make sure there are no typos, and that the session name matches what you found in <code>/usr/share/xsessions/</code>.</p>
+
+  <p>After saving changes, reboot again to apply:</p>
+  <pre><code>sudo reboot</code></pre>
+</div>
+
+<div class="step">
+  <h2>Step 8: Final Reboot</h2>
+  <p>After confirming or fixing the LightDM configuration, reboot your Raspberry Pi one more time to ensure everything works correctly.</p>
+
+  <h3>🔄 Reboot Your Pi</h3>
+  <pre><code>sudo reboot</code></pre>
+
+  <p>On startup, your system should now auto-login to the LXDE desktop in X11 mode as the user <code>jedi</code>, ready for graphical use.</p>
+</div>
+
+
+
+<!-- Scripts -->
+<script>
+  function toggleDropdown() {
+    const dropdown = document.getElementById('settingsDropdown');
+    dropdown.classList.toggle('active');
+  }
+
+  window.addEventListener('click', function(e) {
+    const dropdown = document.getElementById('settingsDropdown');
+    if (!dropdown.contains(e.target)) {
+      dropdown.classList.remove('active');
+    }
+  });
+
+  document.querySelectorAll('.copy').forEach(button => {
+    button.addEventListener('click', () => {
+      const code = button.parentElement.querySelector('code').innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        button.textContent = 'Copied!';
+        setTimeout(() => button.textContent = 'Copy', 2000);
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
+
+</body>
+</html>
